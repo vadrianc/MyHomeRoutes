@@ -10,9 +10,11 @@ with open('in\\key.key', 'r') as file:
     gmaps = googlemaps.Client(key=key_str)
 
     results_file = os.path.isfile("results.csv")
+    now = datetime.now()
+    results_csv = 'results_{}.csv'.format(now.strftime("%m_%d_%Y"))
 
     #read start - end locations
-    with open('in\\tracks.csv', "r", encoding='utf-8') as csvfile, open('results.csv', 'a', newline ='', encoding='utf-8') as results_csv:
+    with open('in\\tracks.csv', "r", encoding='utf-8') as csvfile, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
         if not results_file:
             writer = csv.writer(results_csv)
             writer.writerows([["Start Address", "End Address", "Date", "Hour", "Distance", "Duration"]])
@@ -20,12 +22,12 @@ with open('in\\key.key', 'r') as file:
         tracks_reader = csv.reader(csvfile)
         for track in tracks_reader:
             #get the directions result for the current date/time
-            now = datetime.now()
             directions_result = gmaps.directions(track[0],
                                                 track[1],
                                                 mode="driving",
                                                 units="metric",
-                                                departure_time=now)
+                                                departure_time=now,
+                                                traffic_model="pessimistic")
 
             writer = csv.writer(results_csv)
             #prepare and write direction result
@@ -38,7 +40,4 @@ with open('in\\key.key', 'r') as file:
                 distance = direction["legs"][0]["distance"]["text"]
                 duration = direction["legs"][0]["duration"]["text"]
                 writer.writerows([[start_address, end_address, date, hour, distance, duration]])
-
-
-
-
+                print("{} in {} between \"{}\" and \"{}\"".format(distance, duration, start_address, end_address))
