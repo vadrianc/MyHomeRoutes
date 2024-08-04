@@ -9,9 +9,9 @@ with open('in\\key.key', 'r') as file:
     key_str = file.read().rstrip()
     gmaps = googlemaps.Client(key=key_str)
 
-    results_file = os.path.isfile("results.csv")
     now = datetime.now()
     results_csv = 'results_{}.csv'.format(now.strftime("%m_%d_%Y"))
+    results_file = os.path.isfile(results_csv)
 
     #read start - end locations
     with open('in\\tracks.csv', "r", encoding='utf-8') as csvfile, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
@@ -33,11 +33,10 @@ with open('in\\key.key', 'r') as file:
             #prepare and write direction result
             for direction in directions_result:
                 #pprint.pp(direction)
-                date = now.strftime("%m/%d/%Y")
                 hour = now.strftime("%H")
                 start_address = direction["legs"][0]["start_address"]
                 end_address = direction["legs"][0]["end_address"]
                 distance = direction["legs"][0]["distance"]["text"]
                 duration = direction["legs"][0]["duration"]["text"]
-                writer.writerows([[start_address, end_address, date, hour, distance, duration]])
+                writer.writerows([[start_address, end_address, hour, distance, duration]])
                 print("{} in {} between \"{}\" and \"{}\"".format(distance, duration, start_address, end_address))
