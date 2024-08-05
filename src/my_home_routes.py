@@ -27,8 +27,7 @@ def gather_directions_data():
                                                     track[1],
                                                     mode="driving",
                                                     units="metric",
-                                                    departure_time=now,
-                                                    traffic_model="pessimistic")
+                                                    departure_time=now)
 
                 writer = csv.writer(results_csv)
                 #prepare and write direction result
@@ -38,8 +37,8 @@ def gather_directions_data():
                     start_address = track[0] 
                     end_address = track[1] 
                     distance = direction["legs"][0]["distance"]["text"]
-                    duration = direction["legs"][0]["duration"]["text"]
-                    writer.writerows([[start_address, end_address, hour, distance, duration]])
-                    print("{} in {} from \"{}\" to \"{}\"".format(distance, duration, start_address, end_address))
+                    duration_in_traffic = direction["legs"][0]["duration_in_traffic"]["text"]
+                    writer.writerows([[start_address, end_address, hour, distance, duration_in_traffic]])
+                    print("{} in {} from \"{}\" to \"{}\"".format(distance, duration_in_traffic, start_address, end_address))
 
 gather_directions_data()
