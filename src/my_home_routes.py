@@ -35,11 +35,11 @@ def gather_directions_data():
                 for direction in directions_result:
                     #pprint.pp(direction)
                     hour = now.strftime("%H")
-                    start_address = direction["legs"][0]["start_address"]
-                    end_address = direction["legs"][0]["end_address"]
+                    start_address = track[0] 
+                    end_address = track[1] 
                     distance = direction["legs"][0]["distance"]["text"]
                     duration = direction["legs"][0]["duration"]["text"]
                     writer.writerows([[start_address, end_address, hour, distance, duration]])
-                    print("{} in {} between \"{}\" and \"{}\"".format(distance, duration, start_address, end_address))
+                    print("{} in {} from \"{}\" to \"{}\"".format(distance, duration, start_address, end_address))
 
 gather_directions_data()
