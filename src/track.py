@@ -5,9 +5,10 @@ import csv
 from datetime import datetime
 
 class Track:
-    def __init__(self, key_file, tracks_csv, two_way = False):
+    def __init__(self, key_file, from_txt, to_txt, two_way = False):
         self.key_file = key_file
-        self.tracks_csv = tracks_csv
+        self.from_txt = from_txt
+        self.to_txt = to_txt
         self.two_way = two_way
         self.init_gmaps()
 
@@ -22,18 +23,24 @@ class Track:
         results_file = os.path.isfile(results_csv)
 
         #read start - end locations
-        with open(self.tracks_csv, "r", encoding='utf-8') as csvfile, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
+        with open(self.from_txt, "r", encoding='utf-8') as from_file, open(self.to_txt, "r", encoding='utf-8') as to_file, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
             if not results_file:
                 writer = csv.writer(results_csv)
                 writer.writerows([["Start Address", "End Address", "Date", "Hour", "Distance", "Duration"]])
 
-            tracks_reader = csv.reader(csvfile)
+            from_list = from_file.read()
+            from_list = from_list.splitlines()
+            
+            to_list = to_file.read()
+            to_list = to_list.splitlines()
+
             writer = csv.writer(results_csv)
 
-            for track in tracks_reader:
-                self.save_directions_data(writer, track[0], track[1], now)
-                if self.two_way:
-                    self.save_directions_data(writer, track[1], track[0], now)
+            for start in from_list:
+                for end in to_list:
+                    self.save_directions_data(writer, start, end, now)
+                    if self.two_way:
+                        self.save_directions_data(writer, end, start, now)
 
 
     def save_directions_data(self, writer, start, end, now):
