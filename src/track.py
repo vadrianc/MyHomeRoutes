@@ -50,7 +50,6 @@ class Track:
                                             mode="driving",
                                             units="metric",
                                             departure_time=now)
-
         
         #prepare and write direction result
         for direction in directions_result:
