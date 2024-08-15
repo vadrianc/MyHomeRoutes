@@ -1,11 +1,17 @@
 import argparse
+import os
 
 from track import Track
 from sampler import Sampler
 from plotter import Plotter
 
 def gather(interval):
-    track = Track('in\\key.key', 'in\\from.txt', 'in\\to.txt', True)
+    in_dir = 'in'
+    key_file = os.path.join(in_dir, 'key.key')
+    from_file = os.path.join(in_dir, 'from.txt')
+    to_file = os.path.join(in_dir, 'to.txt')
+    track = Track(key_file, from_file, to_file, True)
+    
     sampler = Sampler()
     sampler.gather(track.gather_directions_data, interval)
 
