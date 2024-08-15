@@ -26,7 +26,7 @@ class Track:
         with open(self.from_txt, "r", encoding='utf-8') as from_file, open(self.to_txt, "r", encoding='utf-8') as to_file, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
             if not results_file:
                 writer = csv.writer(results_csv)
-                writer.writerows([["Start Address", "End Address", "Date", "Hour", "Distance", "Duration"]])
+                writer.writerows([["Start Address", "End Address", "Hour", "Distance", "Duration"]])
 
             from_list = from_file.read()
             from_list = from_list.splitlines()

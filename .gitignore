@@ -163,4 +163,3 @@ cython_debug/
 
 # input and results
 src/results*.csv
-src/in/*
