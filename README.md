@@ -1,7 +1,7 @@
 # My Home Routes
-Interrogates routes and saves results using the Google Maps API
+Interrogates routes and saves results using the Google Maps API.
 
-## Requirements
+## How to setup under Windows
 * Python 3 (get it from https://www.python.org/)
 * `pip install -U googlemaps`
 * `python -m pip install -U matplotlib`
@@ -9,6 +9,20 @@ Interrogates routes and saves results using the Google Maps API
 * Each Google Maps Web Service request requires an API key or client ID. API keys are generated in the 'Credentials' page of the 'APIs & Services' tab of [Google Cloud console](https://console.cloud.google.com/apis/credentials).
 * Any text editor for creating/reading a CSV file (i.e. notepad)
 
+## How to setup under Raspbian GNU/Linux 12 (bookworm)
+Need to create a virtual environment, where we prepare the setup for running the program.
+
+* `python3 -m venv /path/to/environment`
+* `source /my_home_routes/bin/activate`
+* `/path/to/environment/bin/pip install -U googlemaps`
+* `/path/to/environment/bin/python3 -m pip install -U matplotlib`
+* `/path/to/environment/bin/pip install numpy`
+
+Replace `/path/to/environment` with the path of your choosing. Some of the above commands may require elevated privileges, so use `sudo` in front of them.
+
+### Known issues
+1. Failure to import `numpy` caused by *ImportError: libopenblas.so.0: cannot open shared object file: No such file or directory* - install the missing dependency by running `sudo apt-get install libopenblas-dev`.
+2. Failure to import `plotter` caused by *ImportError: libopenjp2.so.7: cannot open shared object file: No such file or directory* - install missing dependency by running `sudo apt-get install libopenjp2-7`
 
 ## Input
 Input is given from the `in` folder. The folder will be located at the same level as the `main.py` script. Before running the program, there are multiple files that require an update:
@@ -37,6 +51,10 @@ After updating the input files, one can run the program in two modes, either for
 ### Plot graph 
 
 `python .\main.py -p ".\in\routes.csv" -r ".\results\results_08_11_2024.csv"` - opens a single graph that displays the necessary driving time between the defined routes, using the gathered data from teh results file.
+
+### Running under Linux by detaching from the current ssh session
+
+`sudo nohup /my_home_routes/bin/python3 main.py -g & >/dev/null 2>&1`
 
 ## Output
 If the file `result_<month>_<day>_<year>.csv` exists, then the results will be appended to it, otherwise the file will be created.

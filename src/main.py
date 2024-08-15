@@ -11,7 +11,7 @@ def gather(interval):
     from_file = os.path.join(in_dir, 'from.txt')
     to_file = os.path.join(in_dir, 'to.txt')
     track = Track(key_file, from_file, to_file, True)
-    
+
     sampler = Sampler()
     sampler.gather(track.gather_directions_data, interval)
 
@@ -48,7 +48,7 @@ def main():
         print(err)
     except Exception as err:
         print(err)
-        print('Unexpected error occured')
+        print('Unexpected error occurred')
   
 if __name__=="__main__": 
     main()
