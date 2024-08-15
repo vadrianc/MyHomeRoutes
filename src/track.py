@@ -10,21 +10,29 @@ class Track:
         self.from_txt = from_txt
         self.to_txt = to_txt
         self.two_way = two_way
+        self.results_dir = 'results'
         self.init_gmaps()
+        self.init_results_dir()
 
     def init_gmaps(self):
         with open(self.key_file, 'r') as file:
             key_str = file.read().rstrip()
             self.gmaps = googlemaps.Client(key=key_str)
 
+    def init_results_dir(self):
+        if not os.path.isdir(self.results_dir):
+            os.mkdir(self.results_dir)
+
     def gather_directions_data(self):
         now = datetime.now()
+        
         results_csv = 'results_{}.csv'.format(now.strftime("%m_%d_%Y"))
-        results_file = os.path.isfile(results_csv)
+        results_csv = os.path.join(self.results_dir, results_csv)
+        results_file_exists = os.path.isfile(results_csv)
 
         #read start - end locations
         with open(self.from_txt, "r", encoding='utf-8') as from_file, open(self.to_txt, "r", encoding='utf-8') as to_file, open(results_csv, 'a', newline ='', encoding='utf-8') as results_csv:
-            if not results_file:
+            if not results_file_exists:
                 writer = csv.writer(results_csv)
                 writer.writerows([["Start Address", "End Address", "Hour", "Distance", "Duration"]])
 

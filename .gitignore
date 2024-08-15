@@ -162,4 +162,4 @@ cython_debug/
 #.idea/
 
 # input and results
-src/results*.csv
+src/results/*
