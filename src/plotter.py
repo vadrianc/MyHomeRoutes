@@ -1,17 +1,30 @@
 import csv
+import errno
+from pathlib import Path
 import re
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 
 class Plotter:
-    def __init__(self, results_csv):
-        self.results_csv = results_csv
+    def __init__(self, results_csv, routes_csv):
+        results_csv_path = Path(results_csv)
+        if not results_csv_path.is_file():
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), results_csv)
+        
+        routes_csv_path = Path(routes_csv)
+        if not routes_csv_path.is_file():
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), routes_csv)
 
-    def draw(self, routes):
+        self.results_csv = results_csv
+        self.routes_csv = routes_csv
+
+    def draw(self):
         plt.title("Driving time")
         plt.xlabel("Hour")
         plt.ylabel("Duration (Minutes)")
 
+        routes = self.get_routes()
         hours = self.get_hours(routes[0], routes[1])
         all_durations = []
 
@@ -56,6 +69,18 @@ class Plotter:
                     durations.append(driving_time_minutes)
 
         return durations
+    
+    def get_routes(self):
+        routes = []
+
+        with open(self.routes_csv, "r", encoding='utf-8') as csvfile:
+            tracks_reader = csv.reader(csvfile)
+
+            for track in tracks_reader:
+                routes.append(track[0])
+                routes.append(track[1])
+
+        return routes
 
     def get_total_minutes(self, time_str):
         times = re.findall(r'\d+', time_str)
